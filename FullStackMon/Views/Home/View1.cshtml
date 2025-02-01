@@ -1,0 +1,45 @@
+﻿<h1>My first View :) :)</h1>
+
+<Style>
+    h1{
+        background-color:red;
+        color:yellow;
+    }
+</Style>
+<script>
+   
+    console.log("welcome from js");
+</script>
+<!--Using Razor Syntax-->
+<!--Block Statments-->
+@{
+    int x=10;
+    int y= x+10;
+}
+
+<!--Inline Statment :online replace with value-->
+@(x+y)
+<h2>Sum of X+Y = @(x+y)</h2>
+
+<!--Condition statmen-->
+@if (x > y)
+{
+    <h2>x greater than y</h2>
+}
+else
+{
+    
+    <h2>x= @x Less than y=@y</h2>
+
+}
+
+<!--looping-->
+<ol>
+@for(int i = 0; i < 10; i++)
+{
+        if (i % 2 == 0)
+        {
+            <li>@i</li>
+        }
+}
+</ol>
