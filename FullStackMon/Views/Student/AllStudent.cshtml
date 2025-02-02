@@ -1,6 +1,7 @@
 ﻿<!--View <== Model (List<student>)-->
+@model List<Student>
 <table class="table table-bordered table-hover">
-@foreach (Student item in Model)
+@foreach (var item in Model)
 {
     <tr>
         <td>@item.Id</td>
@@ -8,7 +9,7 @@
         <td>@item.Address</td>
         <td>@item.Image</td>
         <td><img src="~/Images/@item.Image" style="width:100px" /></td>
-
+        <td><a href="/student/Details/@item.Id">Details</a></td>
     </tr>
 }
 </table>

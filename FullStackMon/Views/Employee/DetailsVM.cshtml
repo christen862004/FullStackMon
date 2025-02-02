@@ -1,0 +1,17 @@
+﻿@* @model FullStackMon.ViewModel.EmployeeWithClrMsgBranchesTempViewModel *@
+
+
+@model EmployeeWithClrMsgBranchesTempViewModel
+@{
+    ViewData["Title"] = "DetailsVM";
+}
+
+<h1>DetailsVM</h1>
+<h2 style="background-color:@Model.Color">@Model.EmpName</h2>
+<select class="form form-control">
+    @foreach (var item in Model.Branches)
+    {
+        <option>@item</option>
+    }
+</select>
+

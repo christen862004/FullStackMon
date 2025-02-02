@@ -2,6 +2,14 @@
 {
     public class TestClass
     {
+        Dictionary<string, object> data;
+        public dynamic bag
+        {
+            get { return data.First(); }
+            set { }
+        }
+
+
         public int Add(int x,int y) 
         { return x + y; }
 
