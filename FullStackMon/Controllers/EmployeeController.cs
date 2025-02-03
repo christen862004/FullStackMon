@@ -36,7 +36,7 @@ namespace FullStackMon.Controllers
 
             Employee EmpModel=context.Employee.FirstOrDefault(x => x.Id == id);
             return View("Details", EmpModel); //view = DEtails ,Model =Employee
-        }
+        }//end of request
 
 
         public IActionResult DetailsVM(int id)

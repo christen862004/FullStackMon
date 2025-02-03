@@ -74,14 +74,15 @@ namespace FullStackMon.Controllers
             }
         }
         //[NonAction]//no endpoint
-        //public ViewResult View(string nameView)
-        //{
-        //    ViewResult result = new ViewResult();
-        //    //set 
-        //    result.ViewName = nameView;
-        //    //REsturn
-        //    return result;
-        //}
+        public ViewResult View(string nameView,object Model)
+        {
+            ViewResult result = new ViewResult();
+            //set 
+            result.ViewName = nameView;
+            //result.ViewData =ViewData.
+            //REsturn
+            return result;
+        }
 
 
         //home/index "endpoint""
