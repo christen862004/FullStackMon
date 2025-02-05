@@ -1,5 +1,6 @@
 ﻿using FullStackMon.Models;
 using FullStackMon.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FullStackMon.Controllers
@@ -13,6 +14,31 @@ namespace FullStackMon.Controllers
                 context.Employee.ToList();
             return View("Index", EmpsModel);
         }
+        //[Authorize]
+        public IActionResult New()
+        {
+            ViewData["DeptList"] = context.Department.ToList();
+            return View("New");
+        }
+
+        [HttpPost]//write endpoint in url
+        [ValidateAntiForgeryToken]//make sure reqquest internal with valid token
+        public IActionResult SaveNew(Employee EmpFromRequest)
+        {
+            
+            if (EmpFromRequest.Name != null && EmpFromRequest.Salary>6000)
+            {
+                context.Add(EmpFromRequest);
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewData["DeptList"] = context.Department.ToList();//Dont FORGET IT
+            return View("New", EmpFromRequest);
+        }
+
+
+
+
         public IActionResult Edit(int id)
         {
             Employee EmpModel=
@@ -68,8 +94,11 @@ namespace FullStackMon.Controllers
 
 
 
-
-
+        //Employee/TestRoute?crsId=10&crsName=C#
+        public IActionResult TestRoute(int crsId,string crsNAme)
+        {
+            return Content("Ok");
+        }
 
 
 

@@ -2,14 +2,53 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<!--//Employeee/Details/1-->
+<a href="/Employee/Index">Back To List</a>
+<br />
+@Html.ActionLink("Bac To List USing HTMl Helper","Index")
+<br />
+@Html.ActionLink("Details Pages", "Details","Employee",new {id=Model.Id,color="red"})
+<hr />
+<a href="/Employee/TestRoute?crsId=10&crsName=C#">Test Route1</a>
+<a asp-controller="Employee" asp-action="TestRoute" 
+    asp-route-crsId="20" asp-route-crsName="MVC">Test Route2</a>
+
 
 <h1>Edit</h1>
-<form method="post" action="/Employee/SaveEdit/@Model.Id">
+<form method="post" 
+    asp-action="SaveNew" 
+    asp-controller="Employee" 
+    asp-route-id="@Model.Id">
+@* <form method="post" action="/employee/saveedit/@Model.id"> *@
     @* <input type="hidden" name="Id" value="@Model.Id" /> *@
     <div>
+        <label asp-for="Name"></label>
+        <input class="form form-control" asp-for="Name"/>
+        <!--id=NAme name=Name value=@Model?.Name type="text"-->
+        
+        
+
+
+
+
+
+        @* @Html.LabelFor(e=>e.Name)
+        @Html.EditorFor(e=>e.Name) *@
+
+        @* @Html.TextBoxFor(e=>e.Name,new {@class="form form-control"}) *@
+        @* @Html.TextBox("Name", null, new { style = "color:red;",@class="form form-control"}) *@
+        @* 
         <label for="Name">Name</label>
-        <input type="text" id="Name" name="Name" value="@Model.Name" class="form form-control" />
+        <input type="text" id="Name" name="Name" value="@Model.Name" style="color:red;" class="form form-control" /> *@
     </div>
+
+
+
+
+
+
+
+
     <div>
         <label for="Salary">Salary</label>
         <input type="number" id="Salary" name="Salary" value="@Model.Salary" class="form form-control" />
@@ -50,4 +89,3 @@
 </div> 
     <input type="submit" value="Save" class="btn btn-success" />
 </form>
-<a href="/Employee/Index">Back To List</a>

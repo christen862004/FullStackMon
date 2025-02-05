@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FullStackMon.Models
 {
@@ -12,7 +13,9 @@ namespace FullStackMon.Models
         public string? JobTitle { get; set; }
 
         [ForeignKey("Department")]
+        [Display(Name="Department")]
         public int DepartmentId { get; set; }
+
         public Department? Department { get; set; }//validation error
     }
 }

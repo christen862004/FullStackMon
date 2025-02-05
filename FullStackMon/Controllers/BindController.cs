@@ -5,6 +5,21 @@ namespace FullStackMon.Controllers
 {
     public class BindController : Controller
     {
+        ///cant be static
+        ///cant be private
+        ///cant overload one case (get | post)
+        //Get:Bind/MEthod1
+        [HttpGet]
+        public IActionResult MEthod1()
+        {
+            return Content("MEthod1");
+        }
+        //post:Bind/MEthod1
+        [HttpPost]
+        public IActionResult MEthod1(int id,string name)
+        {
+            return Content("MEthod1 id,name");
+        }
         /*
          <form action="/Bind/testPrmitive/1" method="get">
               <input name="name">
