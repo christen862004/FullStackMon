@@ -7,6 +7,20 @@ namespace FullStackMon.Controllers
     {
         //From DB using ITIContext
         ITIContext context = new ITIContext();
+
+        public IActionResult ShowDEpartments()
+        {
+            List<Department> depListModel= context.Department.ToList();
+            return View(depListModel);
+        }
+        //Department/EmpByDEpartment?DeptId=1
+        public IActionResult EmpByDEpartment(int DeptId)
+        {
+            List<Employee> empList=context.Employee.Where(e=>e.DepartmentId==DeptId).ToList();
+            return Json(empList);
+        }
+
+
         //Department/index
         public IActionResult Index()
         {

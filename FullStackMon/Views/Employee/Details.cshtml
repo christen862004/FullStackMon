@@ -5,7 +5,14 @@
 
 <h1>Details</h1>
 <h1 style="background-color:@ViewData["clr"]">@Model.Name</h1>
-@* <h2>@ViewData.Model</h2> *@
+
+<partial name="_EmpCardPartial" model="Model"></partial>
+<hr />
+<a href="/Employee/Index">Bac To List</a>
+
+
+
+@* 
 
 <h2>@(int.Parse(ViewData["Temp"].ToString())+10)</h2>
 <h2>@(ViewBag.Temp+10)</h2>
@@ -29,7 +36,7 @@
     {
         <option>@item</option>
     }
-</select>
+</select> *@
 <!--ViewData-->
 <!--MAgic String KEy-->
 <!--Type Casting-->

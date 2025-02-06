@@ -8,6 +8,50 @@ namespace FullStackMon.Controllers
     public class EmployeeController : Controller
     {
         ITIContext context = new ITIContext();
+        //remote attribute : view understand js valiadtion
+        public IActionResult EmpCardPartial(int id)
+        {
+           Employee empModel=
+                context.Employee.FirstOrDefault(e=>e.Id == id);
+
+            return PartialView("_EmpCardPartial",empModel);
+        }
+        
+
+
+
+
+
+
+
+        
+        
+        
+        
+        public IActionResult CheckSalary(int Salary,string JobTitle)
+        {
+            if (JobTitle == "a")
+            {
+                if(Salary<50000 && Salary > 40000)
+                {
+                    return Json(true);
+                }
+            }
+            if (JobTitle == "b")
+            {
+                if (Salary < 40000 && Salary > 30000)
+                {
+                    return Json(true);
+                }
+            }
+            return Json(false);
+            //if (Salary % 5 == 0)
+            //{
+            //    return Json(true);
+            //}
+            //return Json(false);
+        }
+
         public IActionResult Index()
         {
             List<Employee> EmpsModel=
@@ -16,7 +60,7 @@ namespace FullStackMon.Controllers
         }
         //[Authorize]
         public IActionResult New()
-        {
+      {
             ViewData["DeptList"] = context.Department.ToList();
             return View("New");
         }
@@ -25,12 +69,20 @@ namespace FullStackMon.Controllers
         [ValidateAntiForgeryToken]//make sure reqquest internal with valid token
         public IActionResult SaveNew(Employee EmpFromRequest)
         {
-            
-            if (EmpFromRequest.Name != null && EmpFromRequest.Salary>6000)
+           if(ModelState.IsValid==true)
             {
-                context.Add(EmpFromRequest);
-                context.SaveChanges();
-                return RedirectToAction("Index");
+                //if (EmpFromRequest.DepartmentId != 0)
+                try
+                {
+                    context.Add(EmpFromRequest);
+                    context.SaveChanges();
+                    return RedirectToAction("Index");
+                }catch  (Exception ex)
+                {
+                    //send exception as error in modelstate
+                    //  ModelState.AddModelError("DepartmentId", "Please Select DEpartment");
+                    ModelState.AddModelError(string.Empty, ex.InnerException.Message);
+                }
             }
             ViewData["DeptList"] = context.Department.ToList();//Dont FORGET IT
             return View("New", EmpFromRequest);
@@ -63,7 +115,7 @@ namespace FullStackMon.Controllers
         [HttpPost]
         public IActionResult SaveEdit(EmployeeWithDepartmentsListViewModel empFromRequest)
         {
-            if (empFromRequest.Name != null)
+            if (empFromRequest.Name != null)//Validation
             {
                 //context.Update(empFromRequest);
                 
@@ -87,28 +139,22 @@ namespace FullStackMon.Controllers
         }
 
 
-
-
-
-
-
-
-
         //Employee/TestRoute?crsId=10&crsName=C#
         public IActionResult TestRoute(int crsId,string crsNAme)
         {
             return Content("Ok");
         }
-
-
-
-
-
-
+        public IActionResult Delete(int id)
+        {
+            Employee EmpModel = context.Employee.FirstOrDefault(x => x.Id == id);
+            return View("Delete", EmpModel);
+        }
+        
+        
         //Employeee/Details/1
         public IActionResult Details(int id)
         {
-            //Extra data need to send from backend to frontend
+            #region Extra data need to send from backend to frontend
             string msg = "Hello";
             int temp = 10;
             List<string> branches= new List<string>();
@@ -126,8 +172,8 @@ namespace FullStackMon.Controllers
             ViewData["br"] = branches;
             ViewBag.xyz = "hello";
             ViewBag.clr = "blue";
-
-            Employee EmpModel=context.Employee.FirstOrDefault(x => x.Id == id);
+            #endregion
+            Employee EmpModel =context.Employee.FirstOrDefault(x => x.Id == id);
             return View("Details", EmpModel); //view = DEtails ,Model =Employee
         }//end of request
 
