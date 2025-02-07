@@ -1,32 +1,31 @@
 ﻿using FullStackMon.Models;
+using FullStackMon.Repository;
 using FullStackMon.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FullStackMon.Controllers
 {
+    //EmployeeController depend all ITIContext (tigh couple)
     public class EmployeeController : Controller
     {
-        ITIContext context = new ITIContext();
-        //remote attribute : view understand js valiadtion
+        IEmployeeRepository EmployeeRepository;//DIP & IOC
+        IDepartmentRepository DepartmentRepository;
+
+        //depency inject ControllerFactory
+        public EmployeeController
+            (IEmployeeRepository empRepo,IDepartmentRepository deptrep)//inject "ask"
+        {
+            EmployeeRepository =empRepo;
+            DepartmentRepository = deptrep;
+        }
+
         public IActionResult EmpCardPartial(int id)
         {
-           Employee empModel=
-                context.Employee.FirstOrDefault(e=>e.Id == id);
+            Employee empModel =  EmployeeRepository.GetById(id);
 
             return PartialView("_EmpCardPartial",empModel);
-        }
-        
-
-
-
-
-
-
-
-        
-        
-        
+        } 
         
         public IActionResult CheckSalary(int Salary,string JobTitle)
         {
@@ -45,23 +44,19 @@ namespace FullStackMon.Controllers
                 }
             }
             return Json(false);
-            //if (Salary % 5 == 0)
-            //{
-            //    return Json(true);
-            //}
-            //return Json(false);
+           
         }
 
         public IActionResult Index()
         {
-            List<Employee> EmpsModel=
-                context.Employee.ToList();
+            List<Employee> EmpsModel = EmployeeRepository.GetAll();
+               
             return View("Index", EmpsModel);
         }
         //[Authorize]
         public IActionResult New()
-      {
-            ViewData["DeptList"] = context.Department.ToList();
+        {
+            ViewData["DeptList"] =DepartmentRepository.GetAll();
             return View("New");
         }
 
@@ -74,8 +69,8 @@ namespace FullStackMon.Controllers
                 //if (EmpFromRequest.DepartmentId != 0)
                 try
                 {
-                    context.Add(EmpFromRequest);
-                    context.SaveChanges();
+                    EmployeeRepository.Add(EmpFromRequest);
+                    EmployeeRepository.Save();
                     return RedirectToAction("Index");
                 }catch  (Exception ex)
                 {
@@ -84,7 +79,7 @@ namespace FullStackMon.Controllers
                     ModelState.AddModelError(string.Empty, ex.InnerException.Message);
                 }
             }
-            ViewData["DeptList"] = context.Department.ToList();//Dont FORGET IT
+            ViewData["DeptList"] = DepartmentRepository.GetAll();//Dont FORGET IT
             return View("New", EmpFromRequest);
         }
 
@@ -93,9 +88,8 @@ namespace FullStackMon.Controllers
 
         public IActionResult Edit(int id)
         {
-            Employee EmpModel=
-                context.Employee.FirstOrDefault(e=>e.Id==id);
-            List<Department> deptList=context.Department.ToList();
+            Employee EmpModel = EmployeeRepository.GetById(id);
+            List<Department> deptList=DepartmentRepository.GetAll();
 
             EmployeeWithDepartmentsListViewModel empVM = 
                 new EmployeeWithDepartmentsListViewModel();
@@ -121,20 +115,19 @@ namespace FullStackMon.Controllers
                 
 
                 #region Old EntityFramowk update
-                Employee empFromDb =
-                    context.Employee.FirstOrDefault(e => e.Id == empFromRequest.Id);
+                Employee empFromDb =EmployeeRepository.GetById(empFromRequest.Id);
                 empFromDb.Name = empFromRequest.Name;
                 empFromDb.JobTitle = empFromRequest.JobTitle;
                 empFromDb.Address = empFromRequest.Address;
                 empFromDb.ImageUrl = empFromRequest.ImageUrl;
                 empFromDb.Salary = empFromRequest.Salary;
                 empFromDb.DepartmentId = empFromRequest.DepartmentId;
-                context.SaveChanges();
+                EmployeeRepository.Save();
                 #endregion
                 return RedirectToAction("Index");
             }
 
-            empFromRequest.DepartmentList = context.Department.ToList();
+            empFromRequest.DepartmentList = DepartmentRepository.GetAll();
             return View("Edit", empFromRequest);
         }
 
@@ -146,7 +139,7 @@ namespace FullStackMon.Controllers
         }
         public IActionResult Delete(int id)
         {
-            Employee EmpModel = context.Employee.FirstOrDefault(x => x.Id == id);
+            Employee EmpModel = EmployeeRepository.GetById(id);
             return View("Delete", EmpModel);
         }
         
@@ -173,7 +166,7 @@ namespace FullStackMon.Controllers
             ViewBag.xyz = "hello";
             ViewBag.clr = "blue";
             #endregion
-            Employee EmpModel =context.Employee.FirstOrDefault(x => x.Id == id);
+            Employee EmpModel =EmployeeRepository.GetById(id);
             return View("Details", EmpModel); //view = DEtails ,Model =Employee
         }//end of request
 
@@ -191,7 +184,7 @@ namespace FullStackMon.Controllers
             branches.Add("Monofia");
             string color = "red";
 
-            Employee EmpModel = context.Employee.FirstOrDefault(x => x.Id == id);
+            Employee EmpModel = EmployeeRepository.GetById(id);
 
             //create ViewModel Object
             EmployeeWithClrMsgBranchesTempViewModel EmpViewModel = 

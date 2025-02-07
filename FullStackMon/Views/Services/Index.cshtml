@@ -1,0 +1,11 @@
+﻿@using FullStackMon.Repository
+@inject IDepartmentRepository depREpo
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<h4>Id Of Repository From Contorller</h4>@ViewBag.Id
+<hr />
+<h4>Id Of Repository From View</h4>@depREpo.Id
+

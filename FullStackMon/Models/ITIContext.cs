@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.CodeDom;
 
 namespace FullStackMon.Models
 {
@@ -8,8 +9,13 @@ namespace FullStackMon.Models
         {
             
         }
+        //parameter construct
+        public ITIContext(DbContextOptions<ITIContext> options) : base(options)
+        {
 
-      
+        }
+
+
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Department> Department { get; set; }
 

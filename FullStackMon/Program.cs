@@ -1,3 +1,8 @@
+using FullStackMon.Models;
+using FullStackMon.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 namespace FullStackMon
 {
     public class Program
@@ -6,13 +11,24 @@ namespace FullStackMon
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //build in service
+                //alread register
+                //need to register
             // Add services to the container.Day8
             builder.Services.AddControllersWithViews();
                    
             builder.Services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });//--------midleware
+            builder.Services.AddDbContext<ITIContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
 
+            });
+            //custom service
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();//register
+            //builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();//register
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             var app = builder.Build();
             #region Custom inline Midelware

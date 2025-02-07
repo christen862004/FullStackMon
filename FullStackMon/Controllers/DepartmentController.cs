@@ -1,4 +1,5 @@
 ﻿using FullStackMon.Models;
+using FullStackMon.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FullStackMon.Controllers
@@ -6,17 +7,24 @@ namespace FullStackMon.Controllers
     public class DepartmentController : Controller
     {
         //From DB using ITIContext
-        ITIContext context = new ITIContext();
+        // ITIContext context = new ITIContext();
+        IDepartmentRepository DepartmentRepository;
+        IEmployeeRepository EmployeeRepository;
+        public DepartmentController(IEmployeeRepository empRepo,IDepartmentRepository deptREpo)
+        {
+            DepartmentRepository = deptREpo;
+            EmployeeRepository  = empRepo;
+        }
 
         public IActionResult ShowDEpartments()
         {
-            List<Department> depListModel= context.Department.ToList();
+            List<Department> depListModel=DepartmentRepository.GetAll();
             return View(depListModel);
         }
         //Department/EmpByDEpartment?DeptId=1
         public IActionResult EmpByDEpartment(int DeptId)
         {
-            List<Employee> empList=context.Employee.Where(e=>e.DepartmentId==DeptId).ToList();
+            List<Employee> empList=EmployeeRepository.GetByDeptId(DeptId);
             return Json(empList);
         }
 
@@ -24,8 +32,7 @@ namespace FullStackMon.Controllers
         //Department/index
         public IActionResult Index()
         {
-            List<Department> DeptListModel=
-                context.Department.ToList();
+            List<Department> DeptListModel = DepartmentRepository.GetAll();
             return View("Index",DeptListModel);//index ,Model ==>List<Department>
         }
 
@@ -42,9 +49,8 @@ namespace FullStackMon.Controllers
             //add new Department
             if (deptFromRequest.Name != null && deptFromRequest.ManagerName != null)
             {
-                context.Add(deptFromRequest);
-                context.SaveChanges();//exeption
-                                        //return RedirectToAction("Index","Departemrnt",new {id=99});
+                DepartmentRepository.Add(deptFromRequest);
+                DepartmentRepository.Save();
                 return RedirectToAction("Index");
             }
             return View("New", deptFromRequest);//View =>new ,Model =department
