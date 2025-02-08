@@ -3,10 +3,12 @@ using FullStackMon.Repository;
 using FullStackMon.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
 namespace FullStackMon.Controllers
 {
     //EmployeeController depend all ITIContext (tigh couple)
+    
     public class EmployeeController : Controller
     {
         IEmployeeRepository EmployeeRepository;//DIP & IOC
@@ -17,6 +19,7 @@ namespace FullStackMon.Controllers
             (IEmployeeRepository empRepo,IDepartmentRepository deptrep)//inject "ask"
         {
             EmployeeRepository =empRepo;
+            
             DepartmentRepository = deptrep;
         }
 
@@ -88,6 +91,7 @@ namespace FullStackMon.Controllers
 
         public IActionResult Edit(int id)
         {
+            //get data ==>mapping ==>send data to view
             Employee EmpModel = EmployeeRepository.GetById(id);
             List<Department> deptList=DepartmentRepository.GetAll();
 
@@ -107,8 +111,13 @@ namespace FullStackMon.Controllers
         }
         
         [HttpPost]
+   
         public IActionResult SaveEdit(EmployeeWithDepartmentsListViewModel empFromRequest)
         {
+            //if (Request.Method == "Post")
+            //{
+
+            //}else[
             if (empFromRequest.Name != null)//Validation
             {
                 //context.Update(empFromRequest);

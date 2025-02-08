@@ -1,3 +1,4 @@
+using FullStackMon.Filtters;
 using FullStackMon.Models;
 using FullStackMon.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,19 @@ namespace FullStackMon
             var builder = WebApplication.CreateBuilder(args);
 
             //build in service
-                //alread register
-                //need to register
+            //alread register
+            //need to register
             // Add services to the container.Day8
             builder.Services.AddControllersWithViews();
-                   
+            
+            #region Global Filter Attribute
+            //builder.Services.AddControllersWithViews(options =>
+            //{
+            //    //create global attrib
+            //    options.Filters.Add(new HandelErrorAttribute());
+            //});
+            #endregion
+
             builder.Services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });//--------midleware
@@ -26,7 +35,9 @@ namespace FullStackMon
 
             });
             //custom service
-            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();//register
+            //builder.Services.AddScoped<IEmployeeRepository, EmpMemeoryREposirory>();//register
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();//register
+
             //builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();//register
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 

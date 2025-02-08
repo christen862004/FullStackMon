@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.CodeDom;
 
 namespace FullStackMon.Models
 {
-    public class ITIContext:DbContext
+    public class ITIContext:IdentityDbContext<ApplicationUser>
     {
         public ITIContext():base()
         {
