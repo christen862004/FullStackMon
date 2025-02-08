@@ -86,15 +86,28 @@ namespace FullStackMon
             }
             app.UseStaticFiles();//image/1.png & style.css
 
-            app.UseRouting();
+            app.UseRouting();//mapping 
             
             app.UseSession();//----------------
 
             app.UseAuthorization();
+            
+            //app.MapControllerRoute(
+            //  name: "Route1",
+            //  pattern: "{controller}/{action}", 
+            //  defaults: new {Controller="Route"});//one sinment ==>litter r1
+            ////r1/ahmed
+            //r1/ahmed/12
+            //app.MapControllerRoute(
+            // name: "Route2",
+            //  pattern: "r1/{name}/{age:int:range(10,60)}",
 
+            // defaults: new { Controller = "Route", action = "Method2" });//one sinment ==>litter r1
+
+            //DEfault route /Controller/Action
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Employee}/{action=Index}/{id?}");
+                pattern: "{controller=Employee}/{action=Index}/{id?}");//staff (define route &execute)
             #endregion
 
 
