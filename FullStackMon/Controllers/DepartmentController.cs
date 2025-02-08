@@ -1,5 +1,6 @@
 ﻿using FullStackMon.Models;
 using FullStackMon.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FullStackMon.Controllers
@@ -30,6 +31,7 @@ namespace FullStackMon.Controllers
 
 
         //Department/index
+        [Authorize]//non authorize ==>account/login
         public IActionResult Index()
         {
             List<Department> DeptListModel = DepartmentRepository.GetAll();

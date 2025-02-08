@@ -1,6 +1,7 @@
 using FullStackMon.Filtters;
 using FullStackMon.Models;
 using FullStackMon.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -32,8 +33,14 @@ namespace FullStackMon
             builder.Services.AddDbContext<ITIContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
-
             });
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 5;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+            }).AddEntityFrameworkStores<ITIContext>();
             //custom service
             //builder.Services.AddScoped<IEmployeeRepository, EmpMemeoryREposirory>();//register
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();//register

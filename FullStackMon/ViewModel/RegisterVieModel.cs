@@ -6,9 +6,11 @@ namespace FullStackMon.ViewModel
     {
         
         public string Name { get; set; }
-        
+
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
+        [DataType(DataType.Password)]
         [Compare("Password",ErrorMessage ="Password not match Confirm")]
         public string ConfirmPassword { get; set; }
 
